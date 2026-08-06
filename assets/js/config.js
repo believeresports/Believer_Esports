@@ -9,8 +9,8 @@ window.SITE_CONFIG = {
   // ---- Identity ----------------------------------------------------
   orgName: "BELIEVER ESPORTS",
   orgTag: "REGISTER · LOCK IN · DROP IN",
-  contactEmail: "contact@phantomesports.gg",
-  contactWhatsApp: "919999999999", // country code + number, no + or spaces
+  contactEmail: "believer.esports.ff@gmail.com",
+  contactWhatsApp: "919322791341", // country code + number, no + or spaces
 
   // ---- Backend ------------------------------------------------------
   // GitHub Pages only serves static files — it cannot run the payment
