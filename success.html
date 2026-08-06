@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirmed — PHANTOM ESPORTS</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+</head>
+<body>
+  <div class="scan-bg" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a href="index.html" class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name" data-org-name>PHANTOM ESPORTS</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+    </nav>
+  </header>
+
+  <section class="wizard-shell">
+    <div class="success-hero">
+      <div class="icon-ring" aria-hidden="true">✓</div>
+      <h1 style="font-size:clamp(26px,4vw,36px);">You're in the bracket.</h1>
+      <p class="text-dim mt-8">Payment verified. Save this ticket — it's your match check-in.</p>
+    </div>
+
+    <div class="ticket-wrap mt-32">
+      <div class="panel ticket" id="ticket">
+        <div class="ticket-main">
+          <div class="ticket-org">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <b data-org-name>PHANTOM ESPORTS</b>
+          </div>
+
+          <div class="ticket-row"><span class="k">Format</span><span class="v" id="t-mode">—</span></div>
+          <div class="ticket-row"><span class="k">Team name</span><span class="v" id="t-team">—</span></div>
+          <div class="ticket-row"><span class="k">Captain</span><span class="v" id="t-captain">—</span></div>
+          <div class="ticket-row"><span class="k">Payment ID</span><span class="v" id="t-payid">—</span></div>
+
+          <div class="ticket-roster mt-24">
+            <div class="k">Roster</div>
+            <ol id="t-roster"></ol>
+          </div>
+        </div>
+
+        <div class="ticket-stub">
+          <div class="ticket-stamp paid">CONFIRMED</div>
+          <div>
+            <div class="label">Match slot</div>
+            <div class="slot-time" id="t-slot">—</div>
+            <div class="slot-date" id="t-date">—</div>
+          </div>
+          <div>
+            <div class="ticket-row" style="border-top:1px dashed var(--line);"><span class="k">Paid</span><span class="v" id="t-fee">₹0</span></div>
+            <div class="reg-id" id="t-regid"></div>
+          </div>
+        </div>
+        <div class="ticket-seam" aria-hidden="true"></div>
+      </div>
+
+      <div class="wizard-actions mt-24" style="max-width:100%;">
+        <button class="btn btn-ghost" onclick="window.print()">Print / Save ticket</button>
+        <a href="index.html" class="btn btn-primary" style="margin-left:auto;">Back to home</a>
+      </div>
+
+      <p class="text-faint center mt-24" style="font-size:13px;">
+        A receipt has been sent to <span id="t-email" class="mono"></span>.
+        Questions? <a href="#" data-org-whatsapp style="color:var(--cyan);">WhatsApp support</a>.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div>© <span data-year></span> <span data-org-name>PHANTOM ESPORTS</span>. All rights reserved.</div>
+      <div><a href="mailto:" data-org-email>contact@phantomesports.gg</a></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/success.js"></script>
+</body>
+</html>

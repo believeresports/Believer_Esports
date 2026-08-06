@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review & Confirm — PHANTOM ESPORTS</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+</head>
+<body>
+  <div class="scan-bg" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a href="index.html" class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name" data-org-name>PHANTOM ESPORTS</span>
+    </a>
+    <nav class="nav-links">
+      <a href="register.html">← Edit details</a>
+    </nav>
+  </header>
+
+  <section class="wizard-shell">
+    <div class="wrap" style="padding:0;max-width:760px;">
+      <div class="eyebrow">Step 2 of 3</div>
+      <h1 style="font-size:clamp(26px,4vw,36px);">Review before you lock in</h1>
+      <p class="text-dim mt-8">Check every field carefully. Once confirmed, this entry cannot be edited.</p>
+    </div>
+
+    <div class="ticket-wrap mt-32">
+      <div class="panel ticket" id="ticket">
+        <div class="ticket-main">
+          <div class="ticket-org">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <b data-org-name>PHANTOM ESPORTS</b>
+          </div>
+
+          <div class="ticket-row"><span class="k">Format</span><span class="v" id="t-mode">—</span></div>
+          <div class="ticket-row"><span class="k">Team name</span><span class="v" id="t-team">—</span></div>
+          <div class="ticket-row"><span class="k">Captain</span><span class="v" id="t-captain">—</span></div>
+          <div class="ticket-row"><span class="k">Email</span><span class="v" id="t-email">—</span></div>
+          <div class="ticket-row"><span class="k">Phone</span><span class="v" id="t-phone">—</span></div>
+
+          <div class="ticket-roster mt-24">
+            <div class="k">Roster</div>
+            <ol id="t-roster"></ol>
+          </div>
+        </div>
+
+        <div class="ticket-stub">
+          <div class="ticket-stamp" id="ticket-stamp">UNLOCKED</div>
+          <div>
+            <div class="label">Match slot</div>
+            <div class="slot-time" id="t-slot">—</div>
+            <div class="slot-date" id="t-date">—</div>
+          </div>
+          <div>
+            <div class="ticket-row" style="border-top:1px dashed var(--line);"><span class="k">Entry fee</span><span class="v" id="t-fee">₹0</span></div>
+            <div class="reg-id" id="t-regid"></div>
+          </div>
+        </div>
+        <div class="ticket-seam" aria-hidden="true"></div>
+      </div>
+
+      <div class="panel warning-banner">
+        <span class="icon" aria-hidden="true">⚠</span>
+        <div>
+          <b>You cannot change any information after this step</b>
+          <p>Team name, roster IGNs/UIDs, and your match slot lock permanently once you confirm. If anything above is wrong, go back and edit it now — not after payment.</p>
+        </div>
+      </div>
+
+      <label class="confirm-check">
+        <input type="checkbox" id="confirm-checkbox" />
+        <span>I've checked the team name, every player's IGN and UID, and the match slot above. I understand these details lock permanently once I confirm.</span>
+      </label>
+
+      <div class="wizard-actions mt-24" style="max-width:100%;">
+        <a href="register.html" class="btn btn-ghost">← Edit details</a>
+        <button id="confirm-btn" class="btn btn-primary btn-lg" style="margin-left:auto;" disabled>
+          Confirm & Continue →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div>© <span data-year></span> <span data-org-name>PHANTOM ESPORTS</span>. All rights reserved.</div>
+      <div><a href="#" data-org-whatsapp>Need help? WhatsApp us</a></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/confirm.js"></script>
+</body>
+</html>
