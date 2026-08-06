@@ -16,7 +16,7 @@ window.SITE_CONFIG = {
   // GitHub Pages only serves static files — it cannot run the payment
   // server. Deploy the /server folder (Render, Railway, Vercel, etc.)
   // and paste its base URL here. See README.md → "Deploying the backend".
-  apiBaseUrl: "https://YOUR-BACKEND-URL.example.com",
+  apiBaseUrl: "https://believer-esports.onrender.com",
 
   // ---- Razorpay -------------------------------------------------------
   // Public key ONLY. Never put your key_secret in any front-end file.
