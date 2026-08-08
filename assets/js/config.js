@@ -24,9 +24,9 @@ window.SITE_CONFIG = {
 
   // ---- Tournament formats & pricing (INR) ---------------------------
   modes: {
-    solo: { label: "Solo", players: 1, fee: 99, tagline: "One name on the kill feed." },
-    duo: { label: "Duo", players: 2, fee: 179, tagline: "Two players, one revive." },
-    squad: { label: "Squad", players: 4, fee: 299, tagline: "Four players, one banner." },
+    solo: { label: "Solo", players: 1, fee: 50, tagline: "One name on the kill feed." },
+    duo: { label: "Duo", players: 2, fee: 50, tagline: "Two players, one revive." },
+    squad: { label: "Squad", players: 4, fee: 75, tagline: "Four players, one banner." },
   },
 
   // ---- Match slots ----------------------------------------------------
