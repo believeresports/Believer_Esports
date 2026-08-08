@@ -1,5 +1,5 @@
 {
-  "name": "phantom-esports-payment-server",
+  "name": "believer-esports-payment-server",
   "version": "1.0.0",
   "description": "Minimal backend for creating Razorpay orders and verifying payment signatures for the PHANTOM ESPORTS registration site.",
   "main": "server.js",
