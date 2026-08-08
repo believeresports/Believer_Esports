@@ -36,11 +36,18 @@
         amount: data.fee, // rupees — server converts to paise
         currency: cfg.currency,
         registrationId: data.registrationId,
-        notes: {
-          team: data.teamName,
+        // Full registration, stored server-side so the email
+        // notification sent after verification has something to report.
+        registration: {
           mode: data.modeLabel,
           slot: data.slotLabel,
           date: data.date,
+          teamName: data.teamName,
+          roster: data.roster,
+          captainName: data.captainName,
+          captainEmail: data.captainEmail,
+          captainPhone: data.captainPhone,
+          fee: data.fee,
         },
       }),
     });
