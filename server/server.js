@@ -203,4 +203,27 @@ async function sendEmailNotification(registrationId, record) {
 }
 
 /**
- *
+ * Optional: Razorpay webhook, for extra reliability beyond the
+ * checkout handler (catches cases where the browser tab closes right
+ * after payment but before the handler fires). Configure the same URL
+ * + a webhook secret in the Razorpay dashboard if you want this.
+ */
+app.post("/razorpay-webhook", express.raw({ type: "*/*" }), (req, res) => {
+  const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+  if (!secret) return res.status(404).end();
+
+  const signature = req.headers["x-razorpay-signature"];
+  const expected = crypto.createHmac("sha256", secret).update(req.body).digest("hex");
+
+  if (signature !== expected) {
+    return res.status(400).json({ error: "Invalid webhook signature" });
+  }
+
+  const event = JSON.parse(req.body.toString());
+  console.log("Razorpay webhook event:", event.event);
+  res.json({ received: true });
+});
+
+app.listen(PORT, () => {
+  console.log(`Payment server running on port ${PORT}`);
+});
