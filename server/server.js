@@ -18,7 +18,7 @@ const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
 require("dotenv").config();
 
@@ -26,9 +26,9 @@ const {
   RAZORPAY_KEY_ID,
   RAZORPAY_KEY_SECRET,
   ALLOWED_ORIGIN, // e.g. https://yourname.github.io
-  GMAIL_USER, // e.g. yourname@gmail.com — optional, enables email notifications
-  GMAIL_APP_PASSWORD, // 16-character app password from Google, not your normal password
-  NOTIFY_EMAIL, // where registration alerts get sent — defaults to GMAIL_USER
+  RESEND_API_KEY, // optional — enables email notifications. Get one free at resend.com
+  NOTIFY_EMAIL, // where registration alerts get sent — must match your Resend signup email unless you've verified a domain
+  NOTIFY_FROM_NAME = "Tournament Registration", // display name on the notification email
   PORT = 4000,
 } = process.env;
 
@@ -44,19 +44,13 @@ const razorpay = new Razorpay({
   key_secret: RAZORPAY_KEY_SECRET,
 });
 
-// Email notifications are optional — only wired up if Gmail credentials
-// are present. See server/README.md → "Getting registrations onto your
-// computer" for how to generate GMAIL_APP_PASSWORD.
-const mailTransporter =
-  GMAIL_USER && GMAIL_APP_PASSWORD
-    ? nodemailer.createTransport({
-        service: "gmail",
-        auth: { user: GMAIL_USER, pass: GMAIL_APP_PASSWORD },
-      })
-    : null;
+// Email notifications are optional — only wired up if a Resend API key is
+// present. See server/README.md → "Getting registrations onto your
+// computer" for how to get one (no app password / 2FA hoops involved).
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
-if (!mailTransporter) {
-  console.warn("Email notifications disabled — set GMAIL_USER and GMAIL_APP_PASSWORD to enable.");
+if (!resend) {
+  console.warn("Email notifications disabled — set RESEND_API_KEY and NOTIFY_EMAIL to enable.");
 }
 
 const app = express();
@@ -167,12 +161,11 @@ app.post("/verify-payment", (req, res) => {
 });
 
 /**
- * Sends a "new paid registration" email via Gmail, if configured.
+ * Sends a "new paid registration" email via Resend, if configured.
  */
 async function sendEmailNotification(registrationId, record) {
-  if (!mailTransporter) return;
+  if (!resend || !NOTIFY_EMAIL) return;
   const reg = record.registration || {};
-  const to = NOTIFY_EMAIL || GMAIL_USER;
 
   const rosterText = (reg.roster || [])
     .map((p, i) => `  ${i + 1}. ${p.ign} — UID ${p.uid}`)
@@ -196,36 +189,18 @@ async function sendEmailNotification(registrationId, record) {
     `Phone: ${reg.captainPhone}`,
   ].join("\n");
 
-  await mailTransporter.sendMail({
-    from: GMAIL_USER,
-    to,
+  const { error } = await resend.emails.send({
+    // Until you verify your own domain on resend.com/domains, Resend only
+    // lets this default address deliver to the email you signed up with —
+    // which is exactly NOTIFY_EMAIL below, so no domain setup is required.
+    from: `${NOTIFY_FROM_NAME} <onboarding@resend.dev>`,
+    to: [NOTIFY_EMAIL],
     subject: `New registration: ${reg.teamName || "unknown team"} (${reg.mode || ""})`,
     text,
   });
+
+  if (error) throw new Error(typeof error === "string" ? error : JSON.stringify(error));
 }
 
 /**
- * Optional: Razorpay webhook, for extra reliability beyond the
- * checkout handler (catches cases where the browser tab closes right
- * after payment but before the handler fires). Configure the same URL
- * + a webhook secret in the Razorpay dashboard if you want this.
- */
-app.post("/razorpay-webhook", express.raw({ type: "*/*" }), (req, res) => {
-  const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
-  if (!secret) return res.status(404).end();
-
-  const signature = req.headers["x-razorpay-signature"];
-  const expected = crypto.createHmac("sha256", secret).update(req.body).digest("hex");
-
-  if (signature !== expected) {
-    return res.status(400).json({ error: "Invalid webhook signature" });
-  }
-
-  const event = JSON.parse(req.body.toString());
-  console.log("Razorpay webhook event:", event.event);
-  res.json({ received: true });
-});
-
-app.listen(PORT, () => {
-  console.log(`Payment server running on port ${PORT}`);
-});
+ *
