@@ -18,6 +18,7 @@ const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
+const nodemailer = require("nodemailer");
 
 require("dotenv").config();
 
@@ -25,6 +26,9 @@ const {
   RAZORPAY_KEY_ID,
   RAZORPAY_KEY_SECRET,
   ALLOWED_ORIGIN, // e.g. https://yourname.github.io
+  GMAIL_USER, // e.g. yourname@gmail.com — optional, enables email notifications
+  GMAIL_APP_PASSWORD, // 16-character app password from Google, not your normal password
+  NOTIFY_EMAIL, // where registration alerts get sent — defaults to GMAIL_USER
   PORT = 4000,
 } = process.env;
 
@@ -39,6 +43,21 @@ const razorpay = new Razorpay({
   key_id: RAZORPAY_KEY_ID,
   key_secret: RAZORPAY_KEY_SECRET,
 });
+
+// Email notifications are optional — only wired up if Gmail credentials
+// are present. See server/README.md → "Getting registrations onto your
+// computer" for how to generate GMAIL_APP_PASSWORD.
+const mailTransporter =
+  GMAIL_USER && GMAIL_APP_PASSWORD
+    ? nodemailer.createTransport({
+        service: "gmail",
+        auth: { user: GMAIL_USER, pass: GMAIL_APP_PASSWORD },
+      })
+    : null;
+
+if (!mailTransporter) {
+  console.warn("Email notifications disabled — set GMAIL_USER and GMAIL_APP_PASSWORD to enable.");
+}
 
 const app = express();
 app.use(express.json());
@@ -63,7 +82,7 @@ app.get("/", (_req, res) => {
  */
 app.post("/create-order", async (req, res) => {
   try {
-    const { amount, currency = "INR", registrationId, notes = {} } = req.body;
+    const { amount, currency = "INR", registrationId, registration = {} } = req.body;
 
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
@@ -76,10 +95,18 @@ app.post("/create-order", async (req, res) => {
       amount: Math.round(amount * 100), // Razorpay wants paise
       currency,
       receipt: registrationId,
-      notes,
+      // Razorpay caps notes to a handful of short fields — keep this small.
+      // The full roster/contact details are stored in `registrations` below
+      // and used for the email notification after verification.
+      notes: {
+        team: registration.teamName || "",
+        mode: registration.mode || "",
+        slot: registration.slot || "",
+        date: registration.date || "",
+      },
     });
 
-    registrations.set(registrationId, { order, verified: false });
+    registrations.set(registrationId, { order, verified: false, registration });
 
     res.json({
       orderId: order.id,
@@ -123,8 +150,13 @@ app.post("/verify-payment", (req, res) => {
 
       // ---- Where to extend this ----
       // - Save `record` to a real database
-      // - Send a confirmation e-mail / WhatsApp message
-      // - Push the roster into a spreadsheet or Discord webhook
+      // - Push the roster into a Sheet, Discord webhook, etc.
+
+      // Fire-and-forget: don't make the player wait on an email
+      // round-trip before they see their confirmation screen.
+      sendEmailNotification(registrationId, record).catch((err) =>
+        console.error("Email notification failed:", err)
+      );
     }
 
     res.json({ verified });
@@ -133,6 +165,44 @@ app.post("/verify-payment", (req, res) => {
     res.status(500).json({ verified: false, error: "Verification failed" });
   }
 });
+
+/**
+ * Sends a "new paid registration" email via Gmail, if configured.
+ */
+async function sendEmailNotification(registrationId, record) {
+  if (!mailTransporter) return;
+  const reg = record.registration || {};
+  const to = NOTIFY_EMAIL || GMAIL_USER;
+
+  const rosterText = (reg.roster || [])
+    .map((p, i) => `  ${i + 1}. ${p.ign} — UID ${p.uid}`)
+    .join("\n") || "  (none)";
+
+  const text = [
+    "New paid registration",
+    "",
+    `Registration ID: ${registrationId}`,
+    `Payment ID: ${record.paymentId}`,
+    `Format: ${reg.mode}`,
+    `Match slot: ${reg.slot} on ${reg.date}`,
+    `Team: ${reg.teamName}`,
+    `Fee paid: ₹${reg.fee}`,
+    "",
+    "Roster:",
+    rosterText,
+    "",
+    `Captain: ${reg.captainName}`,
+    `Email: ${reg.captainEmail}`,
+    `Phone: ${reg.captainPhone}`,
+  ].join("\n");
+
+  await mailTransporter.sendMail({
+    from: GMAIL_USER,
+    to,
+    subject: `New registration: ${reg.teamName || "unknown team"} (${reg.mode || ""})`,
+    text,
+  });
+}
 
 /**
  * Optional: Razorpay webhook, for extra reliability beyond the
