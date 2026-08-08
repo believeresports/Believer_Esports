@@ -1,4 +1,4 @@
-/* ==========================================================================
+   /* ==========================================================================
    PHANTOM ESPORTS — design system
    Palette: void navy base, three signal colours coding Solo / Duo / Squad,
    amber for the "stamped" / locked states. Panels use clipped (angular)
@@ -97,8 +97,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
 .brand-mark{
   width: 30px; height: 30px; flex: none;
-  background: linear-gradient(135deg, var(--cyan), var(--violet));
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  object-fit: contain;
+  border-radius: 6px;
 }
 .brand-name{ font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0.06em; }
 .brand-name span{ color: var(--cyan); }
