@@ -1,5 +1,5 @@
 /**
- * BELIEVER ESPORTS — payment backend
+ * PHANTOM ESPORTS — payment backend
  * ----------------------------------------------------------------
  * Two jobs, both of which MUST happen server-side because they need
  * RAZORPAY_KEY_SECRET, which should never be shipped to the browser:
