@@ -29,6 +29,7 @@ const {
   RESEND_API_KEY, // optional — enables email notifications. Get one free at resend.com
   NOTIFY_EMAIL, // where registration alerts get sent — must match your Resend signup email unless you've verified a domain
   NOTIFY_FROM_NAME = "Tournament Registration", // display name on the notification email
+  GOOGLE_SHEET_WEBHOOK_URL, // optional — Apps Script Web App URL, see server/README.md
   PORT = 4000,
 } = process.env;
 
@@ -51,6 +52,9 @@ const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 if (!resend) {
   console.warn("Email notifications disabled — set RESEND_API_KEY and NOTIFY_EMAIL to enable.");
+}
+if (!GOOGLE_SHEET_WEBHOOK_URL) {
+  console.warn("Google Sheet logging disabled — set GOOGLE_SHEET_WEBHOOK_URL to enable.");
 }
 
 const app = express();
@@ -144,12 +148,12 @@ app.post("/verify-payment", (req, res) => {
 
       // ---- Where to extend this ----
       // - Save `record` to a real database
-      // - Push the roster into a Sheet, Discord webhook, etc.
+      // - Push into a Discord webhook, SMS, etc.
 
-      // Fire-and-forget: don't make the player wait on an email
+      // Fire-and-forget: don't make the player wait on an email/Sheet
       // round-trip before they see their confirmation screen.
-      sendEmailNotification(registrationId, record).catch((err) =>
-        console.error("Email notification failed:", err)
+      notifyRegistration(registrationId, record).catch((err) =>
+        console.error("Notification error:", err)
       );
     }
 
@@ -200,6 +204,48 @@ async function sendEmailNotification(registrationId, record) {
   });
 
   if (error) throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+}
+
+/**
+ * Appends a row to a Google Sheet via an Apps Script Web App, if configured.
+ * See server/README.md → "Getting registrations onto your computer" for
+ * the script to paste into Apps Script and how to deploy it.
+ */
+async function logToGoogleSheet(registrationId, record) {
+  if (!GOOGLE_SHEET_WEBHOOK_URL) return;
+  const reg = record.registration || {};
+
+  const res = await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      registrationId,
+      paymentId: record.paymentId,
+      mode: reg.mode,
+      slot: reg.slot,
+      date: reg.date,
+      teamName: reg.teamName,
+      roster: reg.roster,
+      captainName: reg.captainName,
+      captainEmail: reg.captainEmail,
+      captainPhone: reg.captainPhone,
+      fee: reg.fee,
+    }),
+  });
+
+  if (!res.ok) throw new Error(`Google Sheet webhook responded ${res.status}`);
+}
+
+async function notifyRegistration(registrationId, record) {
+  const results = await Promise.allSettled([
+    sendEmailNotification(registrationId, record),
+    logToGoogleSheet(registrationId, record),
+  ]);
+  results.forEach((r, i) => {
+    if (r.status === "rejected") {
+      console.error(`Notification ${i === 0 ? "email" : "Google Sheet"} failed:`, r.reason);
+    }
+  });
 }
 
 /**
