@@ -1,0 +1,208 @@
+/* ==========================================================================
+   Page-specific styles. style.css holds the design system; this file holds
+   layout for individual sections/pages so each stays easy to find & edit.
+   ========================================================================== */
+
+/* ---------------- HERO (index.html) ---------------- */
+.hero{ position: relative; z-index: 1; padding: 96px 24px 64px; }
+.hero-inner{ max-width: var(--maxw); margin: 0 auto; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: center; }
+.hero-kicker{ font-family: var(--font-mono); font-size: 13px; letter-spacing: .2em; color: var(--text-dim); }
+.hero h1{
+  font-size: clamp(40px, 6vw, 68px); line-height: 1.02; margin-top: 18px; font-weight: 700;
+}
+.hero h1 .accent{ color: var(--cyan); }
+.hero p.lede{ margin-top: 22px; color: var(--text-dim); font-size: 17px; max-width: 46ch; }
+.hero-actions{ display:flex; gap:14px; margin-top: 34px; flex-wrap: wrap; }
+.hero-stats{ display:flex; gap: 28px; margin-top: 44px; flex-wrap: wrap; }
+.hero-stat b{ display:block; font-family: var(--font-display); font-size: 26px; }
+.hero-stat span{ font-size: 12px; color: var(--text-faint); letter-spacing: .04em; }
+
+.hero-panel{ padding: 26px; }
+.hero-panel-head{ display:flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.hero-panel-head b{ font-family: var(--font-display); font-size: 14px; letter-spacing: .04em; }
+.live-slot{ display:flex; justify-content: space-between; align-items:center; padding: 14px 0; border-top: 1px dashed var(--line); }
+.live-slot:first-of-type{ border-top: none; }
+.live-slot .t{ font-family: var(--font-mono); font-size: 20px; }
+.live-slot .l{ font-size: 12px; color: var(--text-faint); }
+
+/* ---------------- SECTION shell ---------------- */
+.section{ position: relative; z-index: 1; padding: 72px 24px; }
+.section h2{ font-size: clamp(26px, 3.4vw, 36px); }
+.section .lede{ color: var(--text-dim); max-width: 60ch; margin-top: 12px; }
+
+/* ---------------- format cards ---------------- */
+.formats-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; }
+.format-card{ padding: 26px; }
+.format-card .fc-top{ display:flex; justify-content: space-between; align-items: flex-start; }
+.format-card h3{ font-size: 22px; margin-top: 14px; }
+.format-card p{ color: var(--text-dim); font-size: 14px; margin-top: 8px; }
+.format-card .fc-fee{ font-family: var(--font-mono); font-size: 26px; margin-top: 18px; }
+.format-card .fc-fee span{ font-size: 12px; color: var(--text-faint); }
+.format-card .fc-players{ font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); margin-top: 4px; }
+.format-card[data-mode="solo"] .fc-top .dot{ background: var(--cyan); }
+.format-card[data-mode="duo"] .fc-top .dot{ background: var(--violet); }
+.format-card[data-mode="squad"] .fc-top .dot{ background: var(--magenta); }
+.fc-top .dot{ width: 10px; height: 10px; }
+
+/* ---------------- slots ---------------- */
+.slots-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap: 18px; margin-top: 36px; }
+.slot-card{ padding: 24px; display:flex; align-items:center; justify-content: space-between; }
+.slot-card .t{ font-family: var(--font-mono); font-size: 30px; }
+.slot-card .l{ color: var(--text-faint); font-size: 13px; margin-top: 4px; }
+
+/* ---------------- rules / FAQ ---------------- */
+.rules-list{ margin-top: 32px; display:grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.rules-list li{ list-style: none; background: var(--surface); padding: 18px 22px; display:flex; gap: 16px; }
+.rules-list li .n{ font-family: var(--font-mono); color: var(--cyan); font-size: 13px; flex: none; padding-top: 2px; }
+.rules-list li .b{ font-size: 14.5px; color: var(--text-dim); }
+.rules-list li strong{ color: var(--text); display:block; margin-bottom: 3px; }
+
+/* ==========================================================================
+   REGISTRATION WIZARD (register.html)
+   ========================================================================== */
+.wizard-shell{ position: relative; z-index: 1; padding: 48px 24px 96px; }
+.wizard-head{ max-width: var(--maxw); margin: 0 auto 30px; }
+.steps{ display:flex; gap: 8px; max-width: var(--maxw); margin: 0 auto 40px; }
+.step{ flex:1; height: 4px; background: var(--line); position: relative; overflow: hidden; }
+.step::after{ content:""; position:absolute; inset:0; background: var(--cyan); transform: translateX(-100%); transition: transform .25s ease; }
+.step.done::after{ transform: translateX(0); }
+.step.active::after{ transform: translateX(-40%); }
+
+.wizard{ max-width: var(--maxw); margin: 0 auto; display:grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start; }
+.wz-block{ padding: 30px; margin-bottom: 22px; }
+.wz-block h3{ font-size: 18px; display:flex; align-items:center; gap:10px; }
+.wz-block h3 em{ font-style: normal; font-family: var(--font-mono); color: var(--text-faint); font-size: 13px; }
+.wz-block .desc{ color: var(--text-faint); font-size: 13.5px; margin-top: 6px; margin-bottom: 22px; }
+
+.mode-options{ display:grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.mode-opt{ cursor:pointer; }
+.mode-opt input{ position:absolute; opacity:0; pointer-events:none; }
+.mode-opt .card{ display: block; padding: 18px 16px; border: 1px solid var(--line); background: var(--surface-2); transition: border-color .15s, background .15s; }
+.mode-opt .card b{ display:block; font-family: var(--font-display); font-size: 16px; }
+.mode-opt .card span{ display:block; font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); margin-top: 8px; }
+.mode-opt input:checked + .card{ border-color: var(--cyan); background: var(--cyan-dim); }
+.mode-opt input:focus-visible + .card{ outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+.slot-options{ display:grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+.slot-opt input{ position:absolute; opacity:0; pointer-events:none; }
+.slot-opt .card{ display: block; padding: 16px; border: 1px solid var(--line); background: var(--surface-2); text-align:center; cursor:pointer; }
+.slot-opt .card b{ display:block; font-family: var(--font-mono); font-size: 22px; }
+.slot-opt .card span{ display: block; font-size: 12px; color: var(--text-faint); }
+.slot-opt input:checked + .card{ border-color: var(--violet); background: var(--violet-dim); }
+.slot-opt input:focus-visible + .card{ outline: 2px solid var(--violet); outline-offset: 2px; }
+
+.roster{ display:flex; flex-direction: column; gap: 14px; }
+.roster-row{ display:grid; grid-template-columns: 34px 1fr 1fr; gap: 12px; align-items: start; }
+.roster-badge{
+  width: 34px; height: 34px; display:flex; align-items:center; justify-content:center;
+  background: var(--surface-3); font-family: var(--font-mono); font-size: 13px; color: var(--cyan);
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  margin-top: 2px;
+}
+
+.wz-side{ position: sticky; top: 90px; }
+.summary-row{ display:flex; justify-content: space-between; padding: 12px 0; border-top: 1px dashed var(--line); font-size: 13.5px; }
+.summary-row:first-of-type{ border-top: none; }
+.summary-row .k{ color: var(--text-faint); }
+.summary-row .v{ font-family: var(--font-mono); text-align: right; }
+.summary-total{ display:flex; justify-content: space-between; align-items:center; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.summary-total b{ font-family: var(--font-display); font-size: 24px; }
+
+.wizard-actions{ display:flex; gap: 12px; margin-top: 8px; max-width: var(--maxw); }
+
+/* ==========================================================================
+   MATCH TICKET — shared signature component for confirm / payment / success
+   ========================================================================== */
+.ticket-wrap{ max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+.ticket{
+  display:grid; grid-template-columns: 1fr 240px; background: var(--surface); border: 1px solid var(--line);
+  position: relative;
+}
+.ticket-main{ padding: 34px 32px; }
+.ticket-stub{ padding: 34px 26px; background: var(--surface-2); position: relative; display:flex; flex-direction:column; justify-content: space-between; }
+
+/* perforated seam between main + stub */
+.ticket-seam{
+  position: absolute; top: 0; bottom: 0; left: calc(100% - 240px);
+  width: 0; border-left: 2px dashed var(--line);
+}
+.ticket-seam::before, .ticket-seam::after{
+  content:""; position:absolute; left:-11px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--bg); border: 1px solid var(--line);
+}
+.ticket-seam::before{ top: -11px; }
+.ticket-seam::after{ bottom: -11px; }
+
+.ticket-org{ display:flex; align-items:center; gap:9px; margin-bottom: 26px; }
+.ticket-org .brand-mark{ width: 22px; height: 22px; }
+.ticket-org b{ font-family: var(--font-display); font-size: 13px; letter-spacing: .06em; }
+
+.ticket-row{ display:flex; justify-content: space-between; padding: 13px 0; border-top: 1px solid var(--line-soft); }
+.ticket-row:first-of-type{ border-top: none; }
+.ticket-row .k{ font-size: 12px; color: var(--text-faint); letter-spacing: .03em; text-transform: uppercase; }
+.ticket-row .v{ font-family: var(--font-mono); font-size: 14px; text-align: right; }
+
+.ticket-roster{ margin-top: 6px; }
+.ticket-roster .k{ font-size: 12px; color: var(--text-faint); text-transform: uppercase; letter-spacing: .03em; margin-bottom: 10px; }
+.ticket-roster ol{ margin: 0; padding-left: 18px; }
+.ticket-roster li{ font-family: var(--font-mono); font-size: 13.5px; padding: 5px 0; color: var(--text); }
+.ticket-roster li span{ color: var(--text-faint); font-size: 12px; }
+
+.ticket-stub .label{ font-size: 11.5px; color: var(--text-faint); letter-spacing: .1em; text-transform: uppercase; }
+.ticket-stub .slot-time{ font-family: var(--font-mono); font-size: 34px; margin-top: 6px; }
+.ticket-stub .slot-date{ font-family: var(--font-mono); font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+.ticket-stub .reg-id{ font-family: var(--font-mono); font-size: 13px; color: var(--cyan); margin-top: 22px; word-break: break-all; }
+
+.ticket-stamp{
+  position:absolute; top: 22px; right: 22px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  padding: 6px 10px; border: 1px solid var(--amber); color: var(--amber); transform: rotate(4deg);
+}
+.ticket-stamp.paid{ border-color: var(--cyan); color: var(--cyan); }
+
+/* warning banner (confirm.html) */
+.warning-banner{
+  display:flex; gap: 14px; padding: 18px 20px; margin-top: 26px;
+  background: var(--amber-dim); border: 1px solid var(--amber);
+}
+.warning-banner .icon{ font-size: 20px; flex: none; }
+.warning-banner b{ display:block; color: var(--amber); font-size: 14px; margin-bottom: 4px; }
+.warning-banner p{ font-size: 13.5px; color: var(--text-dim); }
+
+.confirm-check{
+  display:flex; gap: 12px; align-items: flex-start; margin-top: 22px; cursor: pointer;
+  padding: 16px 18px; border: 1px solid var(--line); background: var(--surface-2);
+}
+.confirm-check input{ margin-top: 3px; width: 16px; height: 16px; accent-color: var(--cyan); flex: none; }
+.confirm-check span{ font-size: 13.5px; color: var(--text-dim); }
+
+/* payment.html */
+.pay-box{ max-width: 760px; margin: 30px auto 0; padding: 28px 32px; }
+.pay-row{ display:flex; justify-content: space-between; align-items:center; padding: 10px 0; }
+.pay-methods{ display:flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.pay-methods .pill{ font-size: 11px; }
+.pay-status{ margin-top: 20px; font-size: 13.5px; color: var(--text-dim); display:none; }
+.pay-status.show{ display:block; }
+.pay-status.error{ color: var(--danger); }
+
+/* success.html */
+.success-hero{ text-align:center; padding-top: 30px; }
+.success-hero .icon-ring{
+  width: 76px; height: 76px; margin: 0 auto 22px; display:flex; align-items:center; justify-content:center;
+  border: 1px solid var(--cyan); background: var(--cyan-dim); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  font-size: 28px;
+}
+
+@media (max-width: 900px){
+  .hero-inner{ grid-template-columns: 1fr; }
+  .wizard{ grid-template-columns: 1fr; }
+  .wz-side{ position: static; }
+  .formats-grid{ grid-template-columns: 1fr; }
+  .slots-grid{ grid-template-columns: 1fr; }
+}
+@media (max-width: 640px){
+  .ticket{ grid-template-columns: 1fr; }
+  .ticket-seam{ display:none; }
+  .roster-row{ grid-template-columns: 1fr; }
+  .roster-badge{ display:none; }
+  .steps{ display:none; }
+}
