@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payment — BELIEVER ESPORTS</title>
+  <title>Payment — PHANTOM ESPORTS</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/pages.css" />
 </head>
@@ -12,8 +12,8 @@
 
   <header class="topbar">
     <a href="index.html" class="brand">
-      <img src="assets/img/logo.png" alt="Believer Esports logo" class="brand-mark" />
-      <span class="brand-name" data-org-name>BELIEVER ESPORTS</span>
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name" data-org-name>PHANTOM ESPORTS</span>
     </a>
     <nav class="nav-links">
       <span class="pill"><span class="pill-dot"></span>Registration locked</span>
@@ -46,19 +46,51 @@
         <span style="font-family:var(--font-mono);font-size:22px;" id="p-fee">₹0</span>
       </div>
 
-      <button id="pay-btn" class="btn btn-primary btn-lg btn-block mt-24">Pay with Razorpay</button>
+      <!-- RAZORPAY FLOW — shown when config.paymentMode is "razorpay" -->
+      <div id="razorpay-flow">
+        <button id="pay-btn" class="btn btn-primary btn-lg btn-block mt-24">Pay with Razorpay</button>
 
-      <div class="pay-methods">
-        <span class="pill">UPI</span>
-        <span class="pill">Cards</span>
-        <span class="pill">Netbanking</span>
-        <span class="pill">Wallets</span>
+        <div class="pay-methods">
+          <span class="pill">UPI</span>
+          <span class="pill">Cards</span>
+          <span class="pill">Netbanking</span>
+          <span class="pill">Wallets</span>
+        </div>
+
+        <p class="text-faint mt-16" style="font-size:12.5px;">
+          Payments are processed by Razorpay and verified on our server before your entry is finalised.
+          We never see or store your card/UPI details.
+        </p>
       </div>
 
-      <p class="text-faint mt-16" style="font-size:12.5px;">
-        Payments are processed by Razorpay and verified on our server before your entry is finalised.
-        We never see or store your card/UPI details.
-      </p>
+      <!-- MANUAL UPI FLOW — shown when config.paymentMode is "manual" -->
+      <div id="manual-flow" style="display:none;">
+        <div class="eyebrow mt-24">Pay via UPI</div>
+        <p class="text-dim" style="font-size:13.5px;">
+          Card/UPI checkout is still being set up on our end, so for now, pay directly via UPI and
+          we'll confirm your slot by hand — usually within a few hours.
+        </p>
+
+        <div class="center mt-16">
+          <img id="upi-qr" src="" alt="UPI QR code" style="max-width:220px;border:1px solid var(--line);" />
+        </div>
+
+        <div class="pay-row mt-16"><span class="text-dim">UPI ID</span><span class="mono" id="upi-id-display">—</span></div>
+        <div class="pay-row"><span class="text-dim">Pay to</span><span class="mono" id="upi-payee-display">—</span></div>
+
+        <div class="field mt-24">
+          <label for="utr-input">UPI transaction reference (UTR)<span class="req">*</span></label>
+          <input type="text" id="utr-input" class="mono-input" placeholder="12-digit UTR from your UPI app" maxlength="30" />
+          <div class="field-hint">Found in your UPI app's transaction/payment history right after paying.</div>
+          <div class="field-error" id="err-utr">Enter the UTR shown after your payment.</div>
+        </div>
+
+        <button id="manual-submit-btn" class="btn btn-primary btn-lg btn-block">Submit for Verification</button>
+
+        <p class="text-faint mt-16" style="font-size:12.5px;">
+          This isn't instant — someone checks each payment by hand against our UPI records before confirming your slot.
+        </p>
+      </div>
 
       <div id="pay-status" class="pay-status"></div>
     </div>
