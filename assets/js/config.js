@@ -7,10 +7,10 @@
  */
 window.SITE_CONFIG = {
   // ---- Identity ----------------------------------------------------
-  orgName: "PHANTOM ESPORTS",
+  orgName: "BELIEVER ESPORTS",
   orgTag: "REGISTER · LOCK IN · DROP IN",
-  contactEmail: "contact@phantomesports.gg",
-  contactWhatsApp: "919999999999", // country code + number, no + or spaces
+  contactEmail: "believer.esports.ff@gmail.com",
+  contactWhatsApp: "919322791341", // country code + number, no + or spaces
 
   // ---- Backend ------------------------------------------------------
   // GitHub Pages only serves static files — it cannot run the payment
@@ -30,20 +30,20 @@ window.SITE_CONFIG = {
   //   (transaction reference number) for you to verify by hand. Use
   //   this only as a stopgap while waiting on Razorpay approval, then
   //   switch back to "razorpay" — nothing else needs to change.
-  paymentMode: "razorpay",
+  paymentMode: "manual",
 
   // ---- Manual UPI details (only used when paymentMode is "manual") --
   upi: {
-    id: "yourorg@upi",
+    id: "9322791341@kotakbank",
     payeeName: "Believer Esports",
     qrImage: "assets/img/upi-qr.png", // upload your UPI app's "Receive money" QR here
   },
 
   // ---- Tournament formats & pricing (INR) ---------------------------
   modes: {
-    solo: { label: "Solo", players: 1, fee: 99, tagline: "One name on the kill feed." },
-    duo: { label: "Duo", players: 2, fee: 179, tagline: "Two players, one revive." },
-    squad: { label: "Squad", players: 4, fee: 299, tagline: "Four players, one banner." },
+    solo: { label: "Solo", players: 1, fee: 50, tagline: "One name on the kill feed." },
+    duo: { label: "Duo", players: 2, fee: 50, tagline: "Two players, one revive." },
+    squad: { label: "Squad", players: 4, fee: 50, tagline: "Four players, one banner." },
   },
 
   // ---- Match slots ----------------------------------------------------
