@@ -165,7 +165,51 @@ app.post("/verify-payment", (req, res) => {
 });
 
 /**
- * Sends a "new paid registration" email via Resend, if configured.
+ * Records a manual UPI payment claim (used only while paymentMode is
+ * "manual" on the frontend — a stopgap for before Razorpay activation).
+ * This does NOT verify anything automatically — a UTR typed into a form
+ * proves nothing on its own. It just gets the claim to the organizer
+ * (via email/Sheet) so a human can check it against their bank/UPI app
+ * and confirm the player's slot by hand.
+ * body: { registrationId, registration, utr }
+ */
+app.post("/manual-payment-claim", (req, res) => {
+  try {
+    const { registrationId, registration = {}, utr } = req.body;
+
+    if (!registrationId) {
+      return res.status(400).json({ error: "Missing registrationId" });
+    }
+    if (!utr || !String(utr).trim()) {
+      return res.status(400).json({ error: "Missing UTR/reference number" });
+    }
+
+    const record = {
+      verified: false,
+      manual: true,
+      utr: String(utr).trim(),
+      registration,
+      submittedAt: new Date().toISOString(),
+    };
+    registrations.set(registrationId, record);
+
+    // Fire-and-forget, same as the Razorpay path — the player doesn't
+    // wait on the email/Sheet round-trip before seeing the pending screen.
+    notifyRegistration(registrationId, record).catch((err) =>
+      console.error("Notification error:", err)
+    );
+
+    res.json({ received: true });
+  } catch (err) {
+    console.error("manual-payment-claim error:", err);
+    res.status(500).json({ error: "Could not submit claim" });
+  }
+});
+
+/**
+ * Sends a "new registration" email via Resend, if configured. Works for
+ * both a Razorpay-verified payment and a manual UPI claim — the wording
+ * and status line adapt based on record.manual.
  */
 async function sendEmailNotification(registrationId, record) {
   if (!resend || !NOTIFY_EMAIL) return;
@@ -175,15 +219,20 @@ async function sendEmailNotification(registrationId, record) {
     .map((p, i) => `  ${i + 1}. ${p.ign} — UID ${p.uid}`)
     .join("\n") || "  (none)";
 
+  const statusLine = record.manual
+    ? `PENDING — verify UPI UTR ${record.utr} against your bank/UPI app, then confirm this team by hand`
+    : "CONFIRMED — payment verified automatically via Razorpay";
+
   const text = [
-    "New paid registration",
+    record.manual ? "New registration — manual UPI payment claimed" : "New paid registration",
     "",
+    `Status: ${statusLine}`,
     `Registration ID: ${registrationId}`,
-    `Payment ID: ${record.paymentId}`,
+    record.manual ? `UPI UTR submitted: ${record.utr}` : `Payment ID: ${record.paymentId}`,
     `Format: ${reg.mode}`,
     `Match slot: ${reg.slot} on ${reg.date}`,
     `Team: ${reg.teamName}`,
-    `Fee paid: ₹${reg.fee}`,
+    `Fee: ₹${reg.fee}`,
     "",
     "Roster:",
     rosterText,
@@ -199,7 +248,7 @@ async function sendEmailNotification(registrationId, record) {
     // which is exactly NOTIFY_EMAIL below, so no domain setup is required.
     from: `${NOTIFY_FROM_NAME} <onboarding@resend.dev>`,
     to: [NOTIFY_EMAIL],
-    subject: `New registration: ${reg.teamName || "unknown team"} (${reg.mode || ""})`,
+    subject: `${record.manual ? "[PENDING] " : "[PAID] "}New registration: ${reg.teamName || "unknown team"} (${reg.mode || ""})`,
     text,
   });
 
@@ -208,6 +257,8 @@ async function sendEmailNotification(registrationId, record) {
 
 /**
  * Appends a row to a Google Sheet via an Apps Script Web App, if configured.
+ * Includes a Status/UTR column so manual claims are clearly distinguished
+ * from Razorpay-verified payments.
  * See server/README.md → "Getting registrations onto your computer" for
  * the script to paste into Apps Script and how to deploy it.
  */
@@ -220,7 +271,7 @@ async function logToGoogleSheet(registrationId, record) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       registrationId,
-      paymentId: record.paymentId,
+      paymentId: record.paymentId || "",
       mode: reg.mode,
       slot: reg.slot,
       date: reg.date,
@@ -230,6 +281,8 @@ async function logToGoogleSheet(registrationId, record) {
       captainEmail: reg.captainEmail,
       captainPhone: reg.captainPhone,
       fee: reg.fee,
+      status: record.manual ? "PENDING (manual UPI)" : "CONFIRMED (Razorpay)",
+      utr: record.manual ? record.utr : "",
     }),
   });
 
