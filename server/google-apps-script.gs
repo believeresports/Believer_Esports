@@ -27,6 +27,8 @@ function doPost(e) {
       "Match Slot",
       "Match Date",
       "Fee (INR)",
+      "Status",
+      "UTR (manual UPI only)",
     ]);
   }
 
@@ -49,6 +51,8 @@ function doPost(e) {
     data.slot || "",
     data.date || "",
     data.fee || "",
+    data.status || "",
+    data.utr || "",
   ]);
 
   return ContentService.createTextOutput(JSON.stringify({ status: "ok" })).setMimeType(
