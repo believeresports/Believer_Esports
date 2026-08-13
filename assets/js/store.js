@@ -5,7 +5,7 @@
  * registration data from page to page via sessionStorage instead of
  * in-memory state. Data clears when the tab closes.
  */
-const STORE_KEY = "believer_registration_v1";
+const STORE_KEY = "phantom_registration_v1";
 
 const Store = {
   get() {
@@ -44,6 +44,8 @@ const Store = {
         ? data && data.locked && data.registrationId
         : step === "success"
         ? data && data.paid
+        : step === "pending"
+        ? data && data.manualSubmitted
         : false;
 
     if (!ok) {
