@@ -13,7 +13,7 @@
 
   <header class="topbar">
     <a href="index.html" class="brand">
-      <img src="assets/img/logo.png" alt="Believer Esports logo" class="brand-mark" />
+      <span class="brand-mark" aria-hidden="true"></span>
       <span class="brand-name" data-org-name>BELIEVER ESPORTS</span>
     </a>
     <nav class="nav-links">
@@ -50,20 +50,7 @@
           <b>TODAY'S SLOTS</b>
           <span class="pill"><span class="pill-dot"></span>LIVE</span>
         </div>
-        <div class="live-slot">
-          <div>
-            <div class="t">1:00 PM</div>
-            <div class="l">Afternoon bracket</div>
-          </div>
-          <span class="pill">OPEN</span>
-        </div>
-        <div class="live-slot">
-          <div>
-            <div class="t">7:00 PM</div>
-            <div class="l">Prime-time bracket</div>
-          </div>
-          <span class="pill">OPEN</span>
-        </div>
+        <div id="hero-slots"></div>
       </div>
     </div>
   </section>
@@ -74,29 +61,7 @@
       <h2>Solo, Duo or Squad — same arena.</h2>
       <p class="lede">Every format runs on both daily slots. Pick the one that matches how you play.</p>
 
-      <div class="formats-grid">
-        <div class="panel format-card" data-mode="solo">
-          <div class="fc-top"><span class="dot" style="width:10px;height:10px;"></span></div>
-          <h3>Solo</h3>
-          <p>One name on the kill feed. No revives, no excuses.</p>
-          <div class="fc-fee">₹99 <span>/ entry</span></div>
-          <div class="fc-players">1 PLAYER</div>
-        </div>
-        <div class="panel format-card" data-mode="duo">
-          <div class="fc-top"><span class="dot" style="width:10px;height:10px;"></span></div>
-          <h3>Duo</h3>
-          <p>Two players, one revive. Coordination wins fights.</p>
-          <div class="fc-fee">₹179 <span>/ entry</span></div>
-          <div class="fc-players">2 PLAYERS</div>
-        </div>
-        <div class="panel format-card" data-mode="squad">
-          <div class="fc-top"><span class="dot" style="width:10px;height:10px;"></span></div>
-          <h3>Squad</h3>
-          <p>Four players, one banner. Full-team tactical play.</p>
-          <div class="fc-fee">₹299 <span>/ entry</span></div>
-          <div class="fc-players">4 PLAYERS</div>
-        </div>
-      </div>
+      <div class="formats-grid" id="formats-grid"></div>
 
       <div class="center mt-32">
         <a href="register.html" class="btn btn-primary">Register Your Team</a>
@@ -110,22 +75,7 @@
       <h2>Two match slots, every day.</h2>
       <p class="lede">Choose the slot that fits your schedule when you register — you'll set the exact date on the next step.</p>
 
-      <div class="slots-grid">
-        <div class="panel slot-card">
-          <div>
-            <div class="t">1:00 PM</div>
-            <div class="l">Afternoon bracket</div>
-          </div>
-          <span class="pill">DAILY</span>
-        </div>
-        <div class="panel slot-card">
-          <div>
-            <div class="t">7:00 PM</div>
-            <div class="l">Prime-time bracket</div>
-          </div>
-          <span class="pill">DAILY</span>
-        </div>
-      </div>
+      <div class="slots-grid" id="slots-grid"></div>
     </div>
   </section>
 
@@ -166,9 +116,9 @@
 
   <footer>
     <div class="wrap">
-      <div>© <span data-year></span> <span data-org-name>PHANTOM ESPORTS</span>. All rights reserved.</div>
+      <div>© <span data-year></span> <span data-org-name>BELIEVER ESPORTS</span>. All rights reserved.</div>
       <div class="stack" style="align-items:flex-end;gap:6px;">
-        <a href="mailto:" data-org-email>contact@phantomesports.gg</a>
+        <a href="mailto:" data-org-email>believer.esports,ff@gmail.com</a>
         <a href="#" data-org-whatsapp>WhatsApp support</a>
       </div>
     </div>
@@ -176,5 +126,6 @@
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/index.js"></script>
 </body>
 </html>
