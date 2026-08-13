@@ -91,6 +91,15 @@
 .slot-opt input:checked + .card{ border-color: var(--violet); background: var(--violet-dim); }
 .slot-opt input:focus-visible + .card{ outline: 2px solid var(--violet); outline-offset: 2px; }
 
+.date-options{ display:flex; flex-wrap:wrap; gap: 10px; }
+.date-opt{ flex: 0 0 auto; }
+.date-opt input{ position:absolute; opacity:0; pointer-events:none; }
+.date-opt .card{ display: block; padding: 12px 18px; border: 1px solid var(--line); background: var(--surface-2); text-align:center; cursor:pointer; }
+.date-opt .card b{ display:block; font-family: var(--font-mono); font-size: 15px; }
+.date-opt .card span{ display: block; font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+.date-opt input:checked + .card{ border-color: var(--magenta); background: var(--magenta-dim); }
+.date-opt input:focus-visible + .card{ outline: 2px solid var(--magenta); outline-offset: 2px; }
+
 .roster{ display:flex; flex-direction: column; gap: 14px; }
 .roster-row{ display:grid; grid-template-columns: 34px 1fr 1fr; gap: 12px; align-items: start; }
 .roster-badge{
