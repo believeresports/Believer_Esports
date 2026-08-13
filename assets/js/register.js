@@ -3,13 +3,38 @@
   const form = document.getElementById("reg-form");
   const modeOptionsEl = document.getElementById("mode-options");
   const slotOptionsEl = document.getElementById("slot-options");
+  const dateOptionsEl = document.getElementById("date-options");
   const rosterEl = document.getElementById("roster");
   const rosterCountLabel = document.getElementById("roster-count-label");
-  const dateInput = document.getElementById("matchDate");
 
-  // ---- restrict date picker to today or later ----
-  const today = new Date();
-  dateInput.min = today.toISOString().split("T")[0];
+  // ---- render date options from config (past dates filtered out automatically) ----
+  function formatPillDate(iso) {
+    const d = new Date(iso + "T00:00:00");
+    return {
+      big: d.toLocaleDateString(undefined, { day: "2-digit", month: "short" }),
+      small: d.toLocaleDateString(undefined, { weekday: "short" }),
+    };
+  }
+
+  const todayISO = new Date().toISOString().split("T")[0];
+  const upcomingDates = (cfg.availableDates || []).filter((d) => d >= todayISO).sort();
+
+  if (!upcomingDates.length) {
+    dateOptionsEl.innerHTML = `<p class="text-faint" style="font-size:13.5px;">No open dates right now — check back soon, or contact us directly.</p>`;
+  } else {
+    upcomingDates.forEach((iso) => {
+      const { big, small } = formatPillDate(iso);
+      const label = document.createElement("label");
+      label.className = "date-opt";
+      label.innerHTML = `
+        <input type="radio" name="matchDate" value="${iso}" required />
+        <span class="card">
+          <b>${big}</b>
+          <span>${small}</span>
+        </span>`;
+      dateOptionsEl.appendChild(label);
+    });
+  }
 
   // ---- render format options from config ----
   Object.entries(cfg.modes).forEach(([key, m]) => {
@@ -90,7 +115,7 @@
   function updateSummary() {
     const mode = getSelected("mode");
     const slot = getSelected("slot");
-    const date = dateInput.value;
+    const date = getSelected("matchDate");
     const team = document.getElementById("teamName").value.trim();
 
     document.getElementById("sum-mode").textContent = mode ? cfg.modes[mode].label : "—";
@@ -167,10 +192,11 @@
       firstInvalid = firstInvalid || modeOptionsEl;
     }
 
-    if (!dateInput.value) {
-      showError(dateInput, document.getElementById("err-matchDate"));
+    const date = getSelected("matchDate");
+    if (!date) {
+      showError(dateOptionsEl, document.getElementById("err-matchDate"));
       valid = false;
-      firstInvalid = firstInvalid || dateInput;
+      firstInvalid = firstInvalid || dateOptionsEl;
     }
 
     const slot = getSelected("slot");
@@ -243,7 +269,7 @@
       modeLabel: cfg.modes[mode].label,
       slot,
       slotLabel: cfg.slots.find((s) => s.id === slot).label,
-      date: dateInput.value,
+      date,
       teamName: teamNameEl.value.trim(),
       roster,
       captainName: captainName.value.trim(),
@@ -272,7 +298,8 @@
     }
     const slotRadio = form.querySelector(`input[name="slot"][value="${existing.slot}"]`);
     if (slotRadio) slotRadio.checked = true;
-    if (existing.date) dateInput.value = existing.date;
+    const dateRadio = form.querySelector(`input[name="matchDate"][value="${existing.date}"]`);
+    if (dateRadio) dateRadio.checked = true;
     if (existing.teamName) document.getElementById("teamName").value = existing.teamName;
     (existing.roster || []).forEach((p, i) => {
       const ignEl = document.getElementById(`ign_${i}`);
