@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register — BELIEVER ESPORTS</title>
+  <title>Register — PHANTOM ESPORTS</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/pages.css" />
 </head>
@@ -12,8 +12,8 @@
 
   <header class="topbar">
     <a href="index.html" class="brand">
-      <img src="assets/img/logo.png" alt="Believer Esports logo" class="brand-mark" />
-      <span class="brand-name" data-org-name>BELIEVER ESPORTS</span>
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name" data-org-name>PHANTOM ESPORTS</span>
     </a>
     <nav class="nav-links">
       <a href="index.html">Home</a>
@@ -51,9 +51,9 @@
           <p class="desc">Pick the day you want to play and one of the two daily slots.</p>
 
           <div class="field">
-            <label for="matchDate">Match date<span class="req">*</span></label>
-            <input type="date" id="matchDate" name="matchDate" required />
-            <div class="field-error" id="err-matchDate">Pick an upcoming date.</div>
+            <label>Match date<span class="req">*</span></label>
+            <div class="date-options" role="radiogroup" aria-label="Match date" id="date-options"></div>
+            <div class="field-error" id="err-matchDate">Pick one of the open dates.</div>
           </div>
 
           <div class="slot-options" role="radiogroup" aria-label="Match time slot" id="slot-options"></div>
