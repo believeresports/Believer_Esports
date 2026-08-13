@@ -52,5 +52,16 @@ window.SITE_CONFIG = {
     { id: "1900", label: "7:00 PM", sub: "Prime-time bracket" },
   ],
 
+  // ---- Available match dates -------------------------------------------
+  // Players pick from this exact list instead of a free calendar — add
+  // or remove dates here as you open/close them for registration.
+  // Format: "YYYY-MM-DD". Order doesn't matter, they're sorted automatically.
+  availableDates: [
+    "2026-08-20",
+    "2026-08-21",
+    "2026-08-27",
+    "2026-08-28",
+  ],
+
   currency: "INR",
 };
