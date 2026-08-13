@@ -57,10 +57,9 @@ window.SITE_CONFIG = {
   // or remove dates here as you open/close them for registration.
   // Format: "YYYY-MM-DD". Order doesn't matter, they're sorted automatically.
   availableDates: [
-    "2026-08-20",
-    "2026-08-21",
-    "2026-08-27",
-    "2026-08-28",
+    "2026-08-15",
+    "2026-08-23",
+    "2026-08-30",
   ],
 
   currency: "INR",
