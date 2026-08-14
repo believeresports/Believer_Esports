@@ -12,6 +12,12 @@ window.SITE_CONFIG = {
   contactEmail: "believer.esports.ff@gmail.com",
   contactWhatsApp: "919322791341", // country code + number, no + or spaces
 
+  // WhatsApp GROUP invite link (not the same as contactWhatsApp above) —
+  // shown after manual registration so players can join for rules, room
+  // ID/password, and match updates. Get this from WhatsApp: open the
+  // group → group name → Invite via link → Copy link.
+  whatsappGroupLink: "https://chat.whatsapp.com/HF2SJC3mKoGA1LVVjToigA",
+
   // ---- Backend ------------------------------------------------------
   // GitHub Pages only serves static files — it cannot run the payment
   // server. Deploy the /server folder (Render, Railway, Vercel, etc.)
