@@ -20,7 +20,20 @@
       el.href = `https://wa.me/${cfg.contactWhatsApp}`;
     }
   });
-  document.title = document.title.replace("PHANTOM ESPORTS", cfg.orgName || "PHANTOM ESPORTS");
+  document.querySelectorAll("[data-whatsapp-group]").forEach((el) => {
+    const link = cfg.whatsappGroupLink;
+    const configured = link && !link.includes("XXXXXXXXXXXXXXXXXXXXXX");
+    const section = el.closest("[data-whatsapp-group-section]") || el;
+    if (configured) {
+      if (el.tagName === "A") el.href = link;
+      section.style.display = "";
+    } else {
+      // Hide the whole surrounding panel rather than ship a dead
+      // placeholder link + orphaned "join our group" copy to real players.
+      section.style.display = "none";
+    }
+  });
+  document.title = document.title.replace("BELIEVER ESPORTS", cfg.orgName || "BELIEVER ESPORTS");
 
   const year = document.querySelector("[data-year]");
   if (year) year.textContent = new Date().getFullYear();
@@ -29,8 +42,14 @@
   // helps whoever deploys this notice it before a player hits payment.html.
   if (cfg.apiBaseUrl && cfg.apiBaseUrl.includes("YOUR-BACKEND-URL")) {
     console.warn(
-      "[PHANTOM ESPORTS] apiBaseUrl in assets/js/config.js is still a placeholder. " +
+      "[BELIEVER ESPORTS] apiBaseUrl in assets/js/config.js is still a placeholder. " +
       "Payments will not work until you deploy /server and set the real URL there."
+    );
+  }
+  if (cfg.whatsappGroupLink && cfg.whatsappGroupLink.includes("XXXXXXXXXXXXXXXXXXXXXX")) {
+    console.warn(
+      "[BELIEVER ESPORTS] whatsappGroupLink in assets/js/config.js is still a placeholder — " +
+      "the \"Join WhatsApp Group\" button will stay hidden until you set a real invite link."
     );
   }
 })();
